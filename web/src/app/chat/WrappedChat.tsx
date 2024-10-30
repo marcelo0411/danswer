@@ -10,8 +10,8 @@ export default function WrappedChat({
   return (
     <FunctionalWrapper
       initiallyToggled={initiallyToggled}
-      content={(toggledSidebar, toggle) => (
-        <ChatPage toggle={toggle} toggledSidebar={toggledSidebar} />
+      content={(toggledSidebar, toggle, isResponsive) => (
+        <ChatPage toggle={toggle} toggledSidebar={toggledSidebar} isResponsive={isResponsive}/>
       )}
     />
   );

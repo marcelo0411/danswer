@@ -5,6 +5,9 @@ import { usePathname, useRouter } from "next/navigation";
 import { ChatIcon, SearchIcon } from "@/components/icons/icons";
 import { SettingsContext } from "@/components/settings/SettingsProvider";
 import KeyboardSymbol from "@/lib/browserUtilities";
+import { useWindowWidth } from "@/components/admin/connectors/windowWidth";
+
+const MIN_CLIENT_WIDTH = 560;
 
 const ToggleSwitch = () => {
   const commandSymbol = KeyboardSymbol();
@@ -92,12 +95,13 @@ export default function FunctionalWrapper({
 }: {
   content: (
     toggledSidebar: boolean,
-    toggle: (toggled?: boolean) => void
+    toggle: (toggled?: boolean) => void,
+    isResponsive: boolean
   ) => ReactNode;
   initiallyToggled: boolean;
 }) {
   const router = useRouter();
-
+  const width = useWindowWidth();
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.metaKey || event.ctrlKey) {
@@ -137,6 +141,8 @@ export default function FunctionalWrapper({
 
   const [toggledSidebar, setToggledSidebar] = useState(initiallyToggled);
 
+  const isResponsive = width < MIN_CLIENT_WIDTH;
+
   const toggle = (value?: boolean) => {
     setToggledSidebar((toggledSidebar) =>
       value !== undefined ? value : !toggledSidebar
@@ -163,8 +169,8 @@ export default function FunctionalWrapper({
         </div>
       )}
 
-      <div className="overscroll-y-contain overflow-y-scroll overscroll-contain left-0 top-0 w-full h-svh">
-        {content(toggledSidebar, toggle)}
+      <div className={`overscroll-y-contain overflow-y-scroll overscroll-contain left-0 top-0 w-full h-svh ${!isResponsive ? "flex":""}`}>
+        {content(toggledSidebar, toggle, isResponsive)}
       </div>
     </>
   );

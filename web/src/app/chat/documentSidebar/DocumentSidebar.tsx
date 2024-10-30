@@ -17,6 +17,7 @@ interface DocumentSidebarProps {
   isLoading: boolean;
   initialWidth: number;
   isOpen: boolean;
+  isResponsive: boolean;
 }
 
 export const DocumentSidebar = forwardRef<HTMLDivElement, DocumentSidebarProps>(
@@ -32,11 +33,12 @@ export const DocumentSidebar = forwardRef<HTMLDivElement, DocumentSidebarProps>(
       isLoading,
       initialWidth,
       isOpen,
+      isResponsive,
     },
     ref: ForwardedRef<HTMLDivElement>
   ) => {
     const { popup, setPopup } = usePopup();
-
+    
     const selectedDocumentIds =
       selectedDocuments?.map((document) => document.document_id) || [];
 
@@ -53,7 +55,7 @@ export const DocumentSidebar = forwardRef<HTMLDivElement, DocumentSidebarProps>(
     return (
       <div
         id="danswer-chat-sidebar"
-        className={`fixed inset-0 transition-opacity duration-300 z-50 bg-black/80 ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
+        className={`${isResponsive ? 'fixed':'flex'} inset-0 transition-opacity duration-300 z-50 ${isOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
         onClick={(e) => {
           if (e.target === e.currentTarget) {
             closeSidebar();
@@ -61,15 +63,18 @@ export const DocumentSidebar = forwardRef<HTMLDivElement, DocumentSidebarProps>(
         }}
       >
         <div
-          className={`ml-auto rounded-l-lg relative border-l bg-text-100 sidebar z-50 absolute right-0 h-screen transition-all duration-300 ${
+          className={`ml-auto relative border-l bg-text-100 sidebar z-50 absolute right-0 h-screen transition-all duration-300 ${
             isOpen ? "opacity-100 translate-x-0" : "opacity-0 translate-x-[10%]"
           }`}
           ref={ref}
           style={{
-            width: initialWidth,
+            width: isResponsive ? window.innerWidth : isOpen ? initialWidth : 0,
           }}
         >
           <div className="pb-6 flex-initial overflow-y-hidden flex flex-col h-screen">
+            <div className="flex flex-row-reverse">
+              <div className="right-0 mr-4 block cursor-pointer" onClick={()=>closeSidebar()}>x</div>
+            </div>
             {popup}
             <div className="pl-3 mx-2 pr-6 mt-3 flex text-text-800 flex-col text-2xl text-emphasis flex font-semibold">
               {dedupedDocuments.length} Documents

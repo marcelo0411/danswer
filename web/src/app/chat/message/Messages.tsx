@@ -412,7 +412,15 @@ export const AIMessage = ({
                                     className="text-sm flex w-full pt-1 gap-x-1.5 overflow-hidden justify-between font-semibold text-text-700"
                                     rel="noreferrer"
                                   >
-                                    <Citation link={doc.link} index={ind + 1} />
+                                    <Citation
+                                      link={doc.link}
+                                      index={ind + 1}
+                                      customEvent={(event)=>{
+                                        event.preventDefault();
+                                        if (toggleDocumentSelection) {
+                                          toggleDocumentSelection();
+                                        }
+                                      }}/>
                                     <p className="shrink truncate ellipsis break-all">
                                       {doc.semantic_identifier ||
                                         doc.document_id}

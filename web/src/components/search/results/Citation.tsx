@@ -6,10 +6,12 @@ export function Citation({
   children,
   link,
   index,
+  customEvent,
 }: {
   link?: string;
   children?: JSX.Element | string | null | ReactNode;
   index?: number;
+  customEvent?: (event: React.MouseEvent<HTMLDivElement>) => void,
 }) {
   const innerText = children
     ? children?.toString().split("[")[1].split("]")[0]
@@ -19,10 +21,11 @@ export function Citation({
     return (
       <CustomTooltip
         citation
-        content={<div className="inline-block p-0 m-0 truncate">{link}</div>}
+        link={link}
+        customEvent={customEvent}
+        content={<div className="inline-block p-0 m-0 truncate w">{link}</div>}
       >
         <a
-          onMouseDown={() => (link ? window.open(link, "_blank") : undefined)}
           className="cursor-pointer inline ml-1 align-middle"
         >
           <span className="group relative -top-1 text-sm text-gray-500 dark:text-gray-400 selection:bg-indigo-300 selection:text-black dark:selection:bg-indigo-900 dark:selection:text-white">
